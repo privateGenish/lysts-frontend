@@ -8,8 +8,23 @@ class Lyst extends ChangeNotifier {
   String? description;
   final List<Task> tasks;
   String type;
+  bool pinned;
 
-  Lyst({required this.title, required this.tasks, required this.lystId, this.description, this.type = "coding"});
+  Lyst(
+      {required this.title,
+      required this.tasks,
+      required this.lystId,
+      this.description,
+      this.type = "coding",
+      this.pinned = false});
+
+  set isPinned(bool pin) {
+//NeedsAttention: figure out if you need to sync this w/ backend
+    pinned = pin;
+    notifyListeners();
+  }
+
+  bool get isPinned => pinned;
 
   static fromJson(json) => Lyst(
       description: json["description"],

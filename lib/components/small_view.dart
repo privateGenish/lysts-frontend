@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -56,103 +55,244 @@ class CupertinoSmallView extends StatelessWidget {
                 ),
               ),
             ),
+//* pinned List
             Consumer<UserModel>(builder: (context, currentUser, child) {
               List<Lyst> lysts = currentUser.lysts;
               return SliverList(
-                  delegate: SliverChildListDelegate(List.generate(lysts.length, (index) {
-                Lyst _currentLyst = lysts[index];
-                //!NeedsAttention dobius method to force an upate on the parent model `user model`.
-                _currentLyst.addListener(() {
-                  currentUser.refresh();
-                });
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Column(
-                    children: [
-                      CupertinoContextMenu(
-                        actions: [
-                          CupertinoContextMenuAction(
-                            //TODO: Implement pin lyst
-                            onPressed: () {},
-                            isDefaultAction: true,
-                            child: const Text("Pin Lyst"),
-                            trailingIcon: Icons.push_pin,
-                          ),
-                          CupertinoContextMenuAction(
-                            //TODO: Implement pin lyst
-                            onPressed: () => showModalBottomSheet(
-                                context: context,
-                                builder: (context) => ChangeNotifierProvider<UserModel>.value(
-                                    value: currentUser,
-                                    builder: (context, snapshot) {
-                                      return AddListMenu(
-                                        lyst: _currentLyst,
-                                      );
-                                    })),
-                            child: const Text("Edit Lyst"),
-                            trailingIcon: Icons.edit,
-                          ),
-                          CupertinoContextMenuAction(
-                            //TODO: Implement share lysts
-                            onPressed: () {},
-                            trailingIcon: Icons.share,
-                            child: const Text("Share Lyst"),
-                          ),
-                          CupertinoContextMenuAction(
-                            onPressed: () async {
-                              Navigator.of(context).pop();
-                              await Future.delayed(const Duration(milliseconds: 400))
-                                  .then((v) => currentUser.deleteLyst(_currentLyst));
-                            },
-                            trailingIcon: Icons.delete,
-                            isDestructiveAction: true,
-                            child: const Text("delete"),
-                          ),
-                        ],
-                        previewBuilder: (context, animation, child) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Material(
-                              child: ListTile(
-                                title: Text(_currentLyst.title),
+                  delegate: SliverChildListDelegate(
+                List.generate(lysts.length, (index) {
+                  Lyst _currentLyst = lysts[index];
+                  if (!_currentLyst.pinned) {
+                    return const SizedBox();
+                  }
+                  //!NeedsAttention dobius method to force an upate on the parent model `user model`.
+                  _currentLyst.addListener(() {
+                    currentUser.refresh();
+                  });
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Column(
+                      children: [
+                        CupertinoContextMenu(
+                          actions: [
+                            CupertinoContextMenuAction(
+                              onPressed: () async {
+                                Navigator.maybePop(context);
+                                await Future.delayed(const Duration(milliseconds: 400));
+                                _currentLyst.isPinned = false;
+                              },
+                              isDefaultAction: true,
+                              child: const Text("Unpin Lyst"),
+                              trailingIcon: Icons.push_pin,
+                            ),
+                            CupertinoContextMenuAction(
+                              onPressed: () => showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => ChangeNotifierProvider<UserModel>.value(
+                                      value: currentUser,
+                                      builder: (context, snapshot) {
+                                        return AddListMenu(
+                                          lyst: _currentLyst,
+                                        );
+                                      })),
+                              child: const Text("Edit Lyst"),
+                              trailingIcon: Icons.edit,
+                            ),
+                            CupertinoContextMenuAction(
+                              //TODO: Implement share lysts
+                              onPressed: () {},
+                              trailingIcon: Icons.share,
+                              child: const Text("Share Lyst"),
+                            ),
+                            CupertinoContextMenuAction(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                await Future.delayed(const Duration(milliseconds: 400))
+                                    .then((v) => currentUser.deleteLyst(_currentLyst));
+                              },
+                              trailingIcon: Icons.delete,
+                              isDestructiveAction: true,
+                              child: const Text("delete"),
+                            ),
+                          ],
+                          previewBuilder: (context, animation, child) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Material(
+                                child: ListTile(
+                                  title: Text(_currentLyst.title),
+                                ),
                               ),
+                            );
+                          },
+                          child: Material(
+                            child: ListTile(
+                              iconColor: Colors.orangeAccent[100],
+                              leading: SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CustomIcon(
+                                  assest: currentUser.avaialableLystTypes[_currentLyst.type]![0],
+                                ),
+                              ),
+                              subtitle: _currentLyst.description != null ? Text(_currentLyst.description!) : null,
+                              title: Text(
+                                _currentLyst.title,
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.push_pin,
+                                    color: Colors.black,
+                                    size: 18,
+                                  ),
+                                  Text("(${_currentLyst.tasks.length - _currentLyst.doneCounter})"),
+                                ],
+                              ),
+                              onTap: () async {
+                                Navigator.of(context).push(CupertinoPageRoute(
+                                    title: "list $index",
+                                    builder: (context) {
+                                      return MultiProvider(
+                                          providers: [
+                                            ChangeNotifierProvider<UserModel>.value(value: currentUser),
+                                            ChangeNotifierProvider<Lyst>.value(value: _currentLyst),
+                                          ],
+                                          builder: (context, snapshot) {
+                                            return const ListPage();
+                                          });
+                                    }));
+                              },
                             ),
-                          );
-                        },
-                        child: Material(
-                          child: ListTile(
-                            iconColor: Colors.orangeAccent,
-                            leading: CustomIcon(
-                              assest: currentUser.avaialableLystTypes[_currentLyst.type]![0],
-                            ),
-                            subtitle: _currentLyst.description != null ? Text(_currentLyst.description!) : null,
-                            title: Text(_currentLyst.title),
-                            trailing: Text("(${_currentLyst.tasks.length - _currentLyst.doneCounter})"),
-                            onTap: () async {
-                              Navigator.of(context).push(CupertinoPageRoute(
-                                  title: "list $index",
-                                  builder: (context) {
-                                    return MultiProvider(
-                                        providers: [
-                                          ChangeNotifierProvider<UserModel>.value(value: currentUser),
-                                          ChangeNotifierProvider<Lyst>.value(value: _currentLyst),
-                                        ],
-                                        builder: (context, snapshot) {
-                                          return const ListPage();
-                                        });
-                                  }));
-                            },
                           ),
                         ),
-                      ),
-                      const Divider(
-                        height: 2,
-                        thickness: 0.6,
-                      )
-                    ],
-                  ),
-                );
-              })));
+                        const Divider(
+                          height: 2,
+                          thickness: 0.6,
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ));
+            }),
+            const SliverToBoxAdapter(
+              child: Divider(
+                thickness: 2,
+                height: 1,
+              ),
+            ),
+//* unPinnedList
+            Consumer<UserModel>(builder: (context, currentUser, child) {
+              List<Lyst> lysts = currentUser.lysts;
+              return SliverList(
+                  delegate: SliverChildListDelegate(
+                List.generate(lysts.length, (index) {
+                  Lyst _currentLyst = lysts[index];
+                  if (_currentLyst.pinned) {
+                    return const SizedBox();
+                  }
+                  //!NeedsAttention dobius method to force an upate on the parent model `user model`.
+                  _currentLyst.addListener(() {
+                    currentUser.refresh();
+                  });
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Column(
+                      children: [
+                        CupertinoContextMenu(
+                          actions: [
+                            CupertinoContextMenuAction(
+                              onPressed: () async {
+                                Navigator.maybePop(context);
+                                await Future.delayed(const Duration(milliseconds: 400));
+                                _currentLyst.isPinned = true;
+                              },
+                              isDefaultAction: true,
+                              child: const Text("Pin Lyst"),
+                              trailingIcon: Icons.push_pin,
+                            ),
+                            CupertinoContextMenuAction(
+                              onPressed: () => showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => ChangeNotifierProvider<UserModel>.value(
+                                      value: currentUser,
+                                      builder: (context, snapshot) {
+                                        return AddListMenu(
+                                          lyst: _currentLyst,
+                                        );
+                                      })),
+                              child: const Text("Edit Lyst"),
+                              trailingIcon: Icons.edit,
+                            ),
+                            CupertinoContextMenuAction(
+                              //TODO: Implement share lysts
+                              onPressed: () {},
+                              trailingIcon: Icons.share,
+                              child: const Text("Share Lyst"),
+                            ),
+                            CupertinoContextMenuAction(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                await Future.delayed(const Duration(milliseconds: 400))
+                                    .then((v) => currentUser.deleteLyst(_currentLyst));
+                              },
+                              trailingIcon: Icons.delete,
+                              isDestructiveAction: true,
+                              child: const Text("delete"),
+                            ),
+                          ],
+                          previewBuilder: (context, animation, child) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Material(
+                                child: ListTile(
+                                  title: Text(_currentLyst.title),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Material(
+                            child: ListTile(
+                              iconColor: Colors.orangeAccent[100],
+                              leading: SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: CustomIcon(
+                                  assest: currentUser.avaialableLystTypes[_currentLyst.type]![0],
+                                ),
+                              ),
+                              subtitle: _currentLyst.description != null ? Text(_currentLyst.description!) : null,
+                              title: Text(_currentLyst.title),
+                              trailing: Text("(${_currentLyst.tasks.length - _currentLyst.doneCounter})"),
+                              onTap: () async {
+                                Navigator.of(context).push(CupertinoPageRoute(
+                                    title: "list $index",
+                                    builder: (context) {
+                                      return MultiProvider(
+                                          providers: [
+                                            ChangeNotifierProvider<UserModel>.value(value: currentUser),
+                                            ChangeNotifierProvider<Lyst>.value(value: _currentLyst),
+                                          ],
+                                          builder: (context, snapshot) {
+                                            return const ListPage();
+                                          });
+                                    }));
+                              },
+                            ),
+                          ),
+                        ),
+                        const Divider(
+                          height: 2,
+                          thickness: 0.6,
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ));
             })
           ] +
           const [SliverPadding(padding: EdgeInsets.only(top: 125))],

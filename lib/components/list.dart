@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lysts/components/components.dart';
 import 'package:provider/provider.dart';
 
-
 class CupertinoLyst extends StatefulWidget {
   const CupertinoLyst({
     Key? key,
@@ -12,8 +11,7 @@ class CupertinoLyst extends StatefulWidget {
   State<CupertinoLyst> createState() => _CupertinoLystState();
 }
 
-class _CupertinoLystState extends State<CupertinoLyst>
-    with WidgetsBindingObserver {
+class _CupertinoLystState extends State<CupertinoLyst> with WidgetsBindingObserver {
   ///
   ///? this values are nullable because they needed to be inialized and then valued
   //? dutring the runtime because they are used at the dispose/paused stage
@@ -109,9 +107,8 @@ class _TaskTilesViewState extends State<TaskTilesView> {
               suffix: Consumer<Lyst>(builder: (context, currentLyst, child) {
                 return IconButton(
                   icon: const Icon(Icons.add),
-                  onPressed: () => currentLyst
-                      .newTask(newTaskController.text)
-                      .then((value) => newTaskController.clear()),
+                  onPressed: () =>
+                      currentLyst.newTask(newTaskController.text).then((value) => newTaskController.clear()),
                 );
               })),
         ),
@@ -170,8 +167,7 @@ class _TaskTilesViewState extends State<TaskTilesView> {
                                     color: Colors.black,
                                   ))
                             ],
-                            title: Consumer<Lyst>(
-                                builder: (context, currentLyst, child) {
+                            title: Consumer<Lyst>(builder: (context, currentLyst, child) {
                               return Text(
                                 "Done tasks (${currentLyst.doneCounter})",
                                 style: const TextStyle(color: Colors.black),
@@ -180,8 +176,7 @@ class _TaskTilesViewState extends State<TaskTilesView> {
                           )
                         ],
                         //* disabled tasks
-                        body: Consumer<Lyst>(
-                            builder: (context, currentLyst, child) {
+                        body: Consumer<Lyst>(builder: (context, currentLyst, child) {
                           return ListView.builder(
                               itemCount: currentLyst.tasks.length,
                               itemBuilder: (context, index) {
@@ -260,13 +255,10 @@ class _TaskTileState extends State<TaskTile> {
       key: widget.key!,
       onDismissed: (direction) => widget.enabled
           ? widget.nested
-              ? Provider.of<Lyst>(context, listen: false)
-                  .removeNestedTask(widget.task, widget.parentTask!)
-              : Provider.of<Lyst>(context, listen: false)
-                  .removeTask(widget.task)
+              ? Provider.of<Lyst>(context, listen: false).removeNestedTask(widget.task, widget.parentTask!)
+              : Provider.of<Lyst>(context, listen: false).removeTask(widget.task)
           : null,
       child: IgnorePointer(
-        // ignoring: false,
         ignoring: !widget.nested ? !(_check ^ widget.enabled) : false,
         child: Column(key: widget.key, children: <Widget>[
           ///Divider
@@ -287,9 +279,7 @@ class _TaskTileState extends State<TaskTile> {
                         },
                         icon: const Icon(Icons.add))
                     : null,
-                visualDensity: widget.nested
-                    ? VisualDensity.compact
-                    : VisualDensity.adaptivePlatformDensity,
+                visualDensity: widget.nested ? VisualDensity.compact : VisualDensity.adaptivePlatformDensity,
                 dense: !widget.enabled || widget.nested,
                 onTap: !widget.enabled
                     ? () async {
@@ -297,10 +287,8 @@ class _TaskTileState extends State<TaskTile> {
                           _check = !_check;
                         });
                         !widget.nested
-                            ? await Future.delayed(
-                                    const Duration(milliseconds: 400))
-                                .then(
-                                    (value) => currentLyst.setDone(widget.task))
+                            ? await Future.delayed(const Duration(milliseconds: 400))
+                                .then((value) => currentLyst.setDone(widget.task))
                             : null;
                       }
                     : null,
@@ -309,21 +297,16 @@ class _TaskTileState extends State<TaskTile> {
                 leading: Transform.scale(
                   scale: widget.enabled && !widget.nested ? 1.2 : 0.9,
                   child: Checkbox(
-                    fillColor: widget.enabled
-                        ? null
-                        : MaterialStateProperty.all(Colors.grey),
+                    fillColor: widget.enabled ? null : MaterialStateProperty.all(Colors.grey),
                     onChanged: (val) async {
                       setState(() {
                         _check = !_check;
                       });
                       !widget.nested
-                          ? await Future.delayed(
-                                  const Duration(milliseconds: 400))
+                          ? await Future.delayed(const Duration(milliseconds: 400))
                               .then((value) => currentLyst.setDone(widget.task))
-                          : await Future.delayed(
-                                  const Duration(milliseconds: 400))
-                              .then((value) => currentLyst.setNestedTaskDone(
-                                  widget.task, widget.parentTask!));
+                          : await Future.delayed(const Duration(milliseconds: 400))
+                              .then((value) => currentLyst.setNestedTaskDone(widget.task, widget.parentTask!));
                     },
                     shape: const CircleBorder(),
                     value: _check,
@@ -336,9 +319,7 @@ class _TaskTileState extends State<TaskTile> {
                     ),
                     controller: taskController,
                     style: TextStyle(
-                      decoration: _check
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
+                      decoration: _check ? TextDecoration.lineThrough : TextDecoration.none,
                     )));
           }),
           // Nested Task Tiles
@@ -356,8 +337,7 @@ class _TaskTileState extends State<TaskTile> {
                   shrinkWrap: true,
 
                   /// generate a widget under the task only if there are nested tasks.
-                  itemCount: widget.task.nestedTask != null &&
-                          widget.task.nestedTask!.isNotEmpty
+                  itemCount: widget.task.nestedTask != null && widget.task.nestedTask!.isNotEmpty
                       ? widget.task.nestedTask!.length + 1
                       : 0,
 
@@ -370,9 +350,7 @@ class _TaskTileState extends State<TaskTile> {
                         }),
                         child: AnimatedCrossFade(
                           firstCurve: Curves.easeIn,
-                          crossFadeState: _isOpen
-                              ? CrossFadeState.showFirst
-                              : CrossFadeState.showSecond,
+                          crossFadeState: _isOpen ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                           duration: const Duration(milliseconds: 50),
                           firstChild: SizedBox(
                             height: 35.0,
@@ -396,8 +374,7 @@ class _TaskTileState extends State<TaskTile> {
                                 size: 18,
                               ),
                               const Padding(padding: EdgeInsets.only(left: 25)),
-                              Text(
-                                  "${widget.task.nestedTask!.length} more tasks")
+                              Text("${widget.task.nestedTask!.length} more tasks")
                             ],
                           ),
                         ),
@@ -411,8 +388,7 @@ class _TaskTileState extends State<TaskTile> {
                     return Padding(
                       padding: const EdgeInsets.only(left: 25.0),
                       child: TaskTile(
-                        key: Key(widget.key.toString() +
-                            _currentNestedTask.hashCode.toString()),
+                        key: Key(widget.key.toString() + _currentNestedTask.hashCode.toString()),
                         task: _currentNestedTask,
                         parentTask: widget.task,
                         nested: true,
@@ -447,7 +423,7 @@ Map list = {
 };
 
 Map list_2 = {
-  "lystId": "lysts-01",
+  "lystId": "lysts-02",
   "title": "Some other list",
   "tasks": [
     {"taskTitle": "the real genish", "done": true},

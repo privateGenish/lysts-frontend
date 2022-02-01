@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:alphabet_scroll_view/alphabet_scroll_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,7 @@ class _AddListMenuState extends State<AddListMenu> {
 
   @override
   Widget build(BuildContext context) {
+    inspect(widget.lyst);
     UserModel currentUser = Provider.of<UserModel>(context, listen: false);
     return Column(
       children: [
@@ -51,7 +54,8 @@ class _AddListMenuState extends State<AddListMenu> {
                             onPressed: () {
                               if (widget.lyst != null) {
                                 widget.lyst!.title = _titleController.text;
-                                widget.lyst!.description = _descriptionController.text;
+                                widget.lyst!.description =
+                                    _descriptionController.text.isNotEmpty ? _descriptionController.text : null;
                                 widget.lyst!.type = _type;
                                 currentUser.editLyst(widget.lyst!);
                                 Navigator.maybePop(context);
@@ -161,18 +165,3 @@ class _AddListMenuState extends State<AddListMenu> {
   }
 }
 
-// ignore: unused_element
-const List<IconData> _icons = [
-  Icons.ac_unit,
-  Icons.beach_access,
-  Icons.alarm,
-  Icons.signal_cellular_0_bar,
-  Icons.cabin,
-  Icons.dangerous,
-  Icons.ac_unit,
-  Icons.beach_access,
-  Icons.alarm,
-  Icons.facebook,
-  Icons.cabin,
-  Icons.dangerous
-];

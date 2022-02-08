@@ -35,7 +35,8 @@ class _SmallViewState extends State<SmallView> {
   }
 }
 
-//FIXME: format the widget tree and the moethods
+//FIXME: format the widget tree and the methods 
+//TODO: create platform specific methods instead of class and create class for layout diffs
 class CupertinoSmallView extends StatelessWidget {
   CupertinoSmallView({
     Key? key,
@@ -222,8 +223,8 @@ class AndroidSmallView extends StatelessWidget {
               backgroundColor: Colors.white,
               forceElevated: true,
               pinned: true,
-              elevation: 2.0,
-              expandedHeight: 100,
+              elevation: 0,
+              expandedHeight: 90,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text("My Lysts"),
               )),

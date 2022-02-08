@@ -1,17 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lysts/components/components.dart';
 import 'package:provider/provider.dart';
 
-class CupertinoLyst extends StatefulWidget {
-  const CupertinoLyst({
+class PlatformBuildLyst extends StatefulWidget {
+  const PlatformBuildLyst({
     Key? key,
   }) : super(key: key);
   @override
-  State<CupertinoLyst> createState() => _CupertinoLystState();
+  State<PlatformBuildLyst> createState() => _PlatformBuildLystState();
 }
 
-class _CupertinoLystState extends State<CupertinoLyst> with WidgetsBindingObserver {
+class _PlatformBuildLystState extends State<PlatformBuildLyst> with WidgetsBindingObserver {
   ///
   ///? this values are nullable because they needed to be inialized and then valued
   //? dutring the runtime because they are used at the dispose/paused stage
@@ -55,27 +57,40 @@ class _CupertinoLystState extends State<CupertinoLyst> with WidgetsBindingObserv
   Widget build(BuildContext context) {
     lyst = Provider.of<Lyst>(context);
     currentUser = Provider.of<UserModel>(context);
-    return CupertinoPageScaffold(
-        child: CustomScrollView(slivers: [
-      CupertinoSliverNavigationBar(
-          heroTag: lyst?.lystId ?? "error tag",
-          previousPageTitle: "My Lists",
-          largeTitle: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                lyst?.title ?? "error tag",
-              ),
-              const SizedBox(width: 10),
-            ],
+    return CupertinoPageScaffold(child: CustomScrollView(slivers: [_platformHeader(lyst!), const TaskTilesView()]));
+  }
+
+  dynamic _platformHeader(Lyst currentLyst) {
+    switch (Platform.operatingSystem) {
+      case 'ios':
+        return CupertinoSliverNavigationBar(
+            heroTag: currentLyst.lystId,
+            previousPageTitle: "My Lists",
+            largeTitle: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  currentLyst.title,
+                ),
+                const SizedBox(width: 10),
+              ],
+            ),
+            trailing: const Icon(
+              Icons.wifi,
+              size: 24,
+            ));
+      case 'android':
+        return SliverAppBar(
+          expandedHeight: 90,
+          forceElevated: true,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(lyst!.title),
           ),
-          trailing: const Icon(
-            Icons.wifi,
-            size: 24,
-            // color: Colors.deep,
-          )),
-      const TaskTilesView()
-    ]));
+        );
+      default:
+    }
   }
 }
 

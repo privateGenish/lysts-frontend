@@ -70,6 +70,13 @@ class UserModel extends ChangeNotifier {
 
   refresh() => notifyListeners();
 
+  setNameNUid(_name, _uid) {
+    name = name;
+    uid = _uid;
+    //cache control
+    notifyListeners();
+  }
+
   Future<void> logOut() async {
     notifyListeners();
   }

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:lysts/components/components.dart';
@@ -17,11 +16,6 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
-    switch (Platform.operatingSystem) {
-      case "ios":
-        return const Material(child: CupertinoLyst());
-      default:
-        return const Scaffold();
-    }
+    return const Material(child:  PlatformBuildLyst());
   }
 }

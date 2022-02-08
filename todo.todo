@@ -1,0 +1,39 @@
+Lysts App Progress:
+
+    Refactoring:
+        ☐ change platform classes to methods
+        ☐ create layout builds
+
+        
+    UI:
+        ✔ Small View @done(22-01-23 16:26)
+        ☐ Medium View
+        ☐ Large View
+        ☐ add new icons
+        
+        Platform:
+            ✔ iOS @done(22-01-23 16:30)
+            ☐ Android
+            ☐ macOS
+            ☐ Windows
+        
+        Layouts:
+            ☐ mobile
+            ☐ tablet
+            ☐ desktop
+    
+    Stages:
+        ✔ State managment @done(22-01-08 16:07)
+        ☐ Http wiring & Cache managments
+        ☐ Error fallback and support
+
+        Http wiring & Cache managment:
+            ✔ create local storage @done(22-01-08 17:40)
+            ☐ cache control local storage & wire Mock Http
+            ☐ Wire Methods
+
+    General todos:
+        ☐ auto delete empty nested @low
+        ✔ fix scroll in `doneButton` @high @done(22-01-20 11:03)
+
+Archive:

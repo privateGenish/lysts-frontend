@@ -72,15 +72,11 @@ class _AvatarMenuContentState extends State<AvatarMenuContent> {
           title: Text("Settings"),
           leading: Icon(Icons.settings),
         ),
-        Consumer<AuthService>(builder: (context, authService, child) {
-          return ListTile(
-            onTap: () async {
-              authService.setUidandClose(context, null);
-            },
-            title: const Text("Log out"),
-            leading: const Icon(Icons.logout),
-          );
-        })
+        ListTile(
+          onTap: () async {},
+          title: const Text("Log out"),
+          leading: const Icon(Icons.logout),
+        )
       ],
     );
   }

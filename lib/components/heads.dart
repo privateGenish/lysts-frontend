@@ -22,9 +22,9 @@ class Head extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserModel>(builder: (context, currentUser, child) {
+    return Consumer<UserModel? >(builder: (context, currentUser, child) {
       return SvgPicture.asset(
-        currentUser.headUri,
+        currentUser?.headUri ?? "assets/default_male_head.svg",
       );
     });
   }

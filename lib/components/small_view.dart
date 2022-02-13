@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lysts/components/components.dart';
 import 'package:lysts/pages/pages.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
 class SmallView extends StatefulWidget {
@@ -35,7 +36,7 @@ class _SmallViewState extends State<SmallView> {
   }
 }
 
-//FIXME: format the widget tree and the methods 
+//FIXME: format the widget tree and the methods
 //TODO: create platform specific methods instead of class and create class for layout diffs
 class CupertinoSmallView extends StatelessWidget {
   CupertinoSmallView({
@@ -219,13 +220,19 @@ class AndroidSmallView extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          const SliverAppBar(
+          SliverAppBar(
               backgroundColor: Colors.white,
-              forceElevated: true,
+              foregroundColor: Colors.black,
               pinned: true,
-              elevation: 0,
+              elevation: 3,
               expandedHeight: 90,
-              flexibleSpace: FlexibleSpaceBar(
+              actions: [
+                IconButton(
+                    onPressed: () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchPage())),
+                    icon: const Hero(child: Icon(Icons.search), tag: "android-search",))
+              ],
+              flexibleSpace: const FlexibleSpaceBar(
                 title: Text("My Lysts"),
               )),
 //* pinned List

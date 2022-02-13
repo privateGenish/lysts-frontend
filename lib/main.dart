@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lysts/components/components.dart';
 import 'package:lysts/pages/pages.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:lysts/components/components.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -27,8 +28,7 @@ class Lysts extends StatelessWidget {
 
   final ThemeData orangeTheme = ThemeData(
       primaryColor: Colors.orange,
-      checkboxTheme: CheckboxThemeData(
-          fillColor: MaterialStateProperty.all(Colors.orange)));
+      checkboxTheme: CheckboxThemeData(fillColor: MaterialStateProperty.all(Colors.orange)));
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +53,13 @@ class Auth extends StatefulWidget {
 class _AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AuthService>(
-      create: (_) => AuthService(),
-      builder: (context, __) {
-        AuthService snapshot = Provider.of<AuthService>(context);
-        if (snapshot.uid != null) {
-          return Home(snapshot.uid!);
-        }
-        return const LoginPage();
-      },
-    );
+    return StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            return Home(snapshot.data!);
+          }
+          return const LoginPage();
+        });
   }
 }

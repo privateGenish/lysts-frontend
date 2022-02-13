@@ -8,6 +8,7 @@ class UserModel extends ChangeNotifier {
   String? name;
   String? uid;
   String headUri = "assets/default_male_head.svg";
+  bool? registerd;
   late final UserHttpRequest _userHttpRequest;
   Map<String, List<dynamic>> avaialableLystTypes = {
     "coding": [FontAwesomeIcons.laptopCode, null, null],
@@ -23,10 +24,9 @@ class UserModel extends ChangeNotifier {
   // ignore: unused_field
   late final LocalStorageService _ls;
   List<Lyst> myLysts;
-  AuthService authService;
   List<Lyst> get lysts => myLysts;
-  UserModel({required this.authService, this.uid, this.name, this.myLysts = const []}) {
-    uid = authService.uid;
+  UserModel({required this.uid, this.name, this.myLysts = const []}) {
+    uid;
     _userHttpRequest = UserHttpRequest(uid ?? "");
     _ls = LocalStorageService(uid ?? "");
     getUser();
@@ -62,6 +62,9 @@ class UserModel extends ChangeNotifier {
     if (jsonData["statusCode"] == 200) {
       name = jsonData["name"];
       myLysts = List.generate(jsonData["myLysts"].length, (index) => Lyst.fromJson(jsonData["myLysts"][index]));
+      registerd = true;
+    } else {
+      registerd = false;
     }
     notifyListeners();
   }
@@ -69,13 +72,6 @@ class UserModel extends ChangeNotifier {
   Future syncLystWithResources() async {}
 
   refresh() => notifyListeners();
-
-  setNameNUid(_name, _uid) {
-    name = name;
-    uid = _uid;
-    //cache control
-    notifyListeners();
-  }
 
   Future<void> logOut() async {
     notifyListeners();

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
@@ -91,33 +92,6 @@ class UserHttpRequest {
     String url = "https://address/user=$uid";
     return await Future.delayed(const Duration(milliseconds: 1000))
         .then((value) => {"statusCode": 200, "uid": uid, "name": "the real genish", "myLysts": jsons});
-  }
-}
-
-// should be Firebase configuration
-class AuthService with ChangeNotifier {
-  String? _uid;
-  String? get uid => _uid;
-  set setUid(String? uid) {
-    _uid = uid;
-    notifyListeners();
-  }
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn.standard();
-
-  Future<void> handleGoogleSignIn() async {
-  try {
-    await _googleSignIn.signIn();
-  } catch (error) {
-    print(error);
-  }
-}
-
-  void setUidandClose(BuildContext context, String? uid) async {
-    Navigator.of(context).pop();
-    await Future.delayed(const Duration(milliseconds: 300));
-    _uid = uid;
-    notifyListeners();
   }
 }
 

@@ -1,10 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lysts/components/components.dart';
 import 'package:lysts/pages/pages.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  final String user;
+  final User user;
   const Home(this.user, {Key? key}) : super(key: key);
 
   @override
@@ -14,15 +15,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    AuthService currentAuthService = Provider.of<AuthService>(context);
     return ChangeNotifierProvider<UserModel?>(
       lazy: false,
-      create: (context) => UserModel(authService: currentAuthService),
+      create: (context) => UserModel(uid: widget.user.uid),
       child: const HomePage(),
       builder: (context, child) {
-        UserModel? currentUser = Provider.of<UserModel?>(context);
-        if (currentUser != null) {
-          if (currentUser.name == null) {
+        UserModel currentUser = Provider.of<UserModel>(context);
+        if (currentUser.registerd != null) {
+          if (!currentUser.registerd!) {
             return const RegisterPage();
           }
           return child!;
@@ -88,7 +88,13 @@ class WaitingSplashScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [Head(radius: 50), CircularProgressIndicator()],
+        children: const [
+          Head(radius: 50),
+          SizedBox(
+            height: 100,
+          ),
+          CircularProgressIndicator()
+        ],
       ),
     );
   }
@@ -102,7 +108,7 @@ class AvatarMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: Consumer2<UserModel, AuthService>(builder: (context, userModel, authService, child) {
+      child: Consumer<UserModel>(builder: (context, userModel, child) {
         return Card(
           shape: const CircleBorder(),
           elevation: 8.0,
@@ -113,12 +119,9 @@ class AvatarMenuButton extends StatelessWidget {
                   useRootNavigator: true,
                   backgroundColor: Colors.transparent,
                   context: context,
-                  builder: (context) => MultiProvider(providers: [
-                        ChangeNotifierProvider<AuthService>.value(
-                          value: authService,
-                        ),
-                        ChangeNotifierProvider<UserModel>.value(value: userModel)
-                      ], builder: (context, _) => const AvatarModalSheet()))),
+                  builder: (context) => MultiProvider(
+                      providers: [ChangeNotifierProvider<UserModel>.value(value: userModel)],
+                      builder: (context, _) => const AvatarModalSheet()))),
         );
       }),
     );

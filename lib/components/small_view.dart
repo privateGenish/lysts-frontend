@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lysts/components/components.dart';
 import 'package:lysts/pages/pages.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
 class SmallView extends StatefulWidget {
@@ -69,7 +68,7 @@ class CupertinoSmallView extends StatelessWidget {
             if (!_currentLyst.pinned) {
               return const SizedBox();
             }
-//! FIXME: NeedsAttention dobius method to force an upate on the parent model `user model`.
+//! FIXME: NeedsAttention dubious method to force an update on the parent model `user model`.
             _currentLyst.addListener(() {
               currentUser.refresh();
             });
@@ -108,7 +107,7 @@ class CupertinoSmallView extends StatelessWidget {
             if (_currentLyst.pinned) {
               return const SizedBox();
             }
-//!NeedsAttention dobius method to force an upate on the parent model `user model`.
+//!NeedsAttention dubious method to force an update on the parent model `user model`.
             _currentLyst.addListener(() {
               currentUser.refresh();
             });
@@ -245,7 +244,7 @@ class AndroidSmallView extends StatelessWidget {
                 if (!_currentLyst.pinned) {
                   return const SizedBox();
                 }
-//! FIXME: NeedsAttention dobius method to force an upate on the parent model `user model`.
+//! FIXME: NeedsAttention dubious method to force an update on the parent model `user model`.
                 _currentLyst.addListener(() {
                   currentUser.refresh();
                 });
@@ -287,7 +286,7 @@ class AndroidSmallView extends StatelessWidget {
                 if (_currentLyst.pinned) {
                   return const SizedBox();
                 }
-//!NeedsAttention dobius method to force an upate on the parent model `user model`.
+//!NeedsAttention dubious method to force an update on the parent model `user model`.
                 _currentLyst.addListener(() {
                   currentUser.refresh();
                 });
@@ -411,7 +410,7 @@ class SmallTile extends StatelessWidget {
         height: 24,
         width: 24,
         child: CustomIcon(
-          assest: currentUser.avaialableLystTypes[_currentLyst.type]![0],
+          assets: currentUser.availableLystTypes[_currentLyst.type]![0],
         ),
       ),
       subtitle: _currentLyst.description != null ? Text(_currentLyst.description!) : null,

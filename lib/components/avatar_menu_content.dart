@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lysts/components/components.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,7 @@ class _AvatarMenuContentState extends State<AvatarMenuContent> {
               widget.controller.animateTo(100, duration: const Duration(milliseconds: 120), curve: Curves.easeIn);
             }
           }),
-          title: const Text("My favourite lists"),
+          title: const Text("My favorite lists"),
           leading: const Icon(Icons.favorite),
         ),
         AnimatedContainer(
@@ -73,7 +74,11 @@ class _AvatarMenuContentState extends State<AvatarMenuContent> {
           leading: Icon(Icons.settings),
         ),
         ListTile(
-          onTap: () async {},
+          onTap: () async {
+            Navigator.maybePop(context);
+            await Future.delayed(const Duration(milliseconds: 300));
+            await FirebaseAuth.instance.signOut();
+          },
           title: const Text("Log out"),
           leading: const Icon(Icons.logout),
         )

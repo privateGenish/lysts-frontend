@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'components.dart';
 
@@ -10,7 +7,7 @@ class LocalStorageService {
   final String _uid;
   LocalStorageService(this._uid);
 
-  Future postTofirstIndex(String key, dynamic value) async {
+  Future postToFirstIndex(String key, dynamic value) async {
     try {
       if (!Hive.isBoxOpen("ls-$_uid")) {
         await Hive.openBox("ls-$_uid");
@@ -99,7 +96,7 @@ class AppFailLogs {
   Map errorMessage;
   AppFailLogs(this.errorMessage);
 
-  static internalError({Object? err}) => AppFailLogs({"info": "inetrnal problam"});
+  static internalError({Object? err}) => AppFailLogs({"info": "internal problem"});
   static hiveFail({Object? err}) => AppFailLogs({"info": "hive have failed"});
   static httpFail({Object? err}) => AppFailLogs({"info": "http request landed a fail"});
   static success() => {"info": "success"};

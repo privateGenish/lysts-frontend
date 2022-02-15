@@ -87,7 +87,7 @@ class _AddListMenuState extends State<AddListMenu> {
                       maxLines: 2,
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                       autofocus: true,
-                      placeholder: "decribe your tasks",
+                      placeholder: "describe your tasks",
                     ),
                   ),
                 ],
@@ -108,7 +108,7 @@ class _AddListMenuState extends State<AddListMenu> {
                                 value: currentUser,
                                 builder: (context, child) {
                                   UserModel currentUser = Provider.of<UserModel>(context, listen: false);
-                                  List types = currentUser.avaialableLystTypes.entries.map((e) => e.key).toList();
+                                  List types = currentUser.availableLystTypes.entries.map((e) => e.key).toList();
                                   return Dialog(
                                     child: SizedBox(
                                       height: MediaQuery.of(context).size.height - 200,
@@ -123,15 +123,15 @@ class _AddListMenuState extends State<AddListMenu> {
                                                 ListTile(
                                                   onTap: () {
                                                     setState(() {
-                                                      _type = currentUser.avaialableLystTypes.entries
+                                                      _type = currentUser.availableLystTypes.entries
                                                           .map((e) => e.key)
                                                           .toList()[index];
                                                     });
                                                     Navigator.maybePop(context);
                                                   },
                                                   leading: CustomIcon(
-                                                      assest: currentUser.avaialableLystTypes[types[index]]![0]),
-                                                  title: Text(currentUser.avaialableLystTypes.entries
+                                                      assets: currentUser.availableLystTypes[types[index]]![0]),
+                                                  title: Text(currentUser.availableLystTypes.entries
                                                       .map((e) => e.key)
                                                       .toList()[index]
                                                       .toUpperCase()),
@@ -148,7 +148,7 @@ class _AddListMenuState extends State<AddListMenu> {
                             backgroundColor: Theme.of(context).cardColor,
                             radius: 35,
                             child: CustomIcon(
-                              assest: currentUser.avaialableLystTypes[_type]![0],
+                              assets: currentUser.availableLystTypes[_type]![0],
                             ),
                           ),
                         ),

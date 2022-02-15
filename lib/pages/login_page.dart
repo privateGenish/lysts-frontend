@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lysts/components/components.dart';
-import 'package:provider/provider.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser;
     try {
-      googleUser = await GoogleSignIn().signIn();
+      googleUser = await GoogleSignIn(scopes: ['profile', 'email']).signIn();
     } catch (e) {
       ScaffoldMessenger.maybeOf(context)
           ?.showSnackBar(const SnackBar(content: Text("Hey there, you didn't logged in!")));
@@ -44,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(FirebaseAuth.instance.currentUser);
     return Scaffold(
         body: Center(
       child: Column(

@@ -3,23 +3,23 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomIcon extends StatelessWidget {
-  final dynamic assest;
-  const CustomIcon({this.assest, Key? key}) : super(key: key);
+  final dynamic assets;
+  const CustomIcon({this.assets, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (assest is String) {
+    if (assets is String) {
       return SvgPicture.asset(
-        assest,
+        assets,
         width: 24,
         height: 24,
       );
     }
-    if (assest is FontAwesomeIcons) {
-      return FaIcon(assest);
+    if (assets is FontAwesomeIcons) {
+      return FaIcon(assets);
     }
-    if (assest is IconData) {
-      return Icon(assest);
+    if (assets is IconData) {
+      return Icon(assets);
     }
     return const Icon(Icons.tab);
   }

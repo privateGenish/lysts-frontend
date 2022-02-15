@@ -10,7 +10,7 @@ class UserModel extends ChangeNotifier {
   String headUri = "assets/default_male_head.svg";
   bool? registerd;
   late final UserHttpRequest _userHttpRequest;
-  Map<String, List<dynamic>> avaialableLystTypes = {
+  Map<String, List<dynamic>> availableLystTypes = {
     "coding": [FontAwesomeIcons.laptopCode, null, null],
     "eShopping": [FontAwesomeIcons.shoppingBag, null, null],
     "goals": [FontAwesomeIcons.bullseye, null, null],
